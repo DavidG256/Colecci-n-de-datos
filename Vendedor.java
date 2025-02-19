@@ -14,17 +14,45 @@ class Vendedor {
         this.jornadaLaboral = jornadaLaboral;
     }
 
-    public String getIdVendedor() { return idVendedor; }
-    public boolean isEsJefe() { return esJefe; }
-    public int getSalario() { return salario; }
-    public String getJornadaLaboral() { return jornadaLaboral; }
+    public String getIdVendedor() {
+        return idVendedor;
+    }
 
-    public void setEsJefe(boolean esJefe) { this.esJefe = esJefe; }
-    public void setSalario(int salario) { this.salario = salario; }
-    public void setJornadaLaboral(String jornadaLaboral) { this.jornadaLaboral = jornadaLaboral; }
+    public boolean isEsJefe() {
+        return esJefe;
+    }
+
+    public int getSalario() {
+        return salario;
+    }
+
+    public String getJornadaLaboral() {
+        return jornadaLaboral;
+    }
+
+    public void setEsJefe(boolean esJefe) {
+        this.esJefe = esJefe;
+    }
+
+    public void setSalario(int salario) {
+        this.salario = salario;
+    }
+
+    public void setJornadaLaboral(String jornadaLaboral) {
+        this.jornadaLaboral = jornadaLaboral;
+    }
+
+    private static int findVendedorIndex(String id) {
+        for (int i = 0; i < vendedores.size(); i++) {
+            if (vendedores.get(i).getIdVendedor().equalsIgnoreCase(id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     public static boolean addNewVendedor(Vendedor v) {
-        if (findVendedor(v.getIdVendedor()) == null) {
+        if (findVendedorIndex(v.getIdVendedor()) == -1) {
             vendedores.add(v);
             return true;
         }
@@ -32,42 +60,56 @@ class Vendedor {
     }
 
     public static boolean removeVendedor(String id) {
-        Vendedor v = findVendedor(id);
-        if (v != null) {
-            vendedores.remove(v);
+        int index = findVendedorIndex(id);
+        if (index != -1) {
+            vendedores.remove(index);
             return true;
         }
         return false;
     }
 
     public static boolean updateVendedor(String id, boolean esJefe, int salario, String jornadaLaboral) {
-        Vendedor v = findVendedor(id);
-        if (v != null) {
-            v.setEsJefe(esJefe);
-            v.setSalario(salario);
-            v.setJornadaLaboral(jornadaLaboral);
+        int index = findVendedorIndex(id);
+        if (index != -1) {
+            vendedores.get(index).setEsJefe(esJefe);
+            vendedores.get(index).setSalario(salario);
+            vendedores.get(index).setJornadaLaboral(jornadaLaboral);
             return true;
         }
         return false;
     }
 
-    public static Vendedor findVendedor(String id) {
+
+    public static Vendedor queryVendedor(String idVendedor) {
         for (Vendedor v : vendedores) {
-            if (v.getIdVendedor().equals(id)) {
+            if (v.getIdVendedor().equalsIgnoreCase(idVendedor)) {
                 return v;
             }
         }
         return null;
     }
 
+
     public static void printVendedor() {
+        System.out.println("Lista de vendedores:");
+        if (vendedores.isEmpty()) {
+            System.out.println("No hay vendedores registrados.");
+            return;
+        }
+        int contador = 1;
         for (Vendedor v : vendedores) {
-            System.out.println(v);
+            System.out.println(contador + ". " + v);
+            contador++;
         }
     }
 
     @Override
     public String toString() {
-        return "ID: " + idVendedor + ", Jefe: " + esJefe + ", Salario: " + salario + ", Jornada: " + jornadaLaboral;
+        return "Vendedor{" +
+                "idVendedor='" + idVendedor + '\'' +
+                ", esJefe=" + esJefe +
+                ", salario=" + salario +
+                ", jornadaLaboral='" + jornadaLaboral + '\'' +
+                '}';
     }
 }
